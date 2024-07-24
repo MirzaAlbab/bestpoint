@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const app = express();
 const methodOverride = require("method-override");
+const ejsMate = require("ejs-mate");
 
 mongoose
   .connect("mongodb://127.0.0.1/bestpoints")
@@ -15,7 +16,7 @@ mongoose
 
 // models
 const Place = require("./models/place");
-
+app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));

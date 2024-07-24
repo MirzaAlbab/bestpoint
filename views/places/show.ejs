@@ -1,25 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%=place.title%></title>
-  </head>
-  <body>
-    <img src="<%=place.image%>" alt="" />
-    <h1><%= place.title %></h1>
-    <p><%= place.description %></p>
-    <p><%= place.location %></p>
-    <p><%= place.price %></p>
+<% layout("layouts/app")%>
+<img src="<%=place.image%>" alt="" />
+<h1><%= place.title %></h1>
+<p><%= place.description %></p>
+<p><%= place.location %></p>
+<p><%= place.price %></p>
 
-    <a href="/places/<%=place._id%>/edit">edit</a>
-    <form
-      action="/places/<%=place._id%>?_method=DELETE"
-      method="post"
-      style="display: inline"
-    >
-      <button type="submit">delete</button>
-    </form>
-    <a href="/places">All Places</a>
-  </body>
-</html>
+<a href="/places/<%=place._id%>/edit">edit</a>
+<form
+  action="/places/<%=place._id%>?_method=DELETE"
+  method="post"
+  style="display: inline"
+>
+  <button type="submit">delete</button>
+</form>
+<a href="/places">All Places</a>
