@@ -1,9 +1,23 @@
-<%layout("layouts/app")%>
+<% layout("layouts/app")%>
 <h2>All Places</h2>
-
-<a href="/places/new">Add Places</a>
 <ul>
   <% for (const place of places) { %>
-  <li><a href="/places/<%=place._id%>"><%= place.title %></a></li>
+  <div class="card mb-3">
+    <div class="row no-gutters">
+      <div class="col-md-4">
+        <img src="<%= place.image %>" class="card-img" alt="..." />
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title"><%= place.title %></h5>
+          <p class="card-text"><%= place.location %></p>
+          <p class="card-text">
+            <small class="text-secondary"><%= place.description %></small>
+          </p>
+          <a href="/places/<%=place._id%>" class="btn btn-primary">View</a>
+        </div>
+      </div>
+    </div>
+  </div>
   <% } %>
 </ul>

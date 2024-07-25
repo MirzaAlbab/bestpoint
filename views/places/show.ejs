@@ -1,8 +1,8 @@
 <% layout("layouts/app")%>
-<img src="<%=place.image%>" alt="" />
 <h1><%= place.title %></h1>
-<p><%= place.description %></p>
 <p><%= place.location %></p>
+<img src="<%=place.image%>" alt="" />
+<p><%= place.description %></p>
 <p><%= place.price %></p>
 
 <a href="/places/<%=place._id%>/edit">edit</a>
