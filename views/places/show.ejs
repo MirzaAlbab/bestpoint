@@ -1,6 +1,6 @@
 <% layout("layouts/app")%>
 <div class="row mb-5">
-  <div class="col-6 offset-3">
+  <div class="col-6">
     <div class="card">
       <img src="<%=place.image%>" alt="<%=place.title%>" class="card-img-top" />
       <div class="card-body">
@@ -25,5 +25,43 @@
         <a href="/places" class="btn btn-secondary text-white">Back</a>
       </div>
     </div>
+  </div>
+  <div class="col-6">
+    <h2>Review</h2>
+    <form action="/places/<%=place._id%>/reviews" class="validation-form" novalidate method="post">
+      <div class="mb-3">
+        <label for="rating">Rating:</label>
+        <input type="range" class="form-range" min="1" max="5" id="rating" name="review[rating]" required />
+      </div>
+      <div class="mb-3">
+        <label for="comment">Comment
+          <textarea
+            class="form-control"
+            id="comment"
+            name="review[comment]"
+            required
+            rows="5"
+           cols="100"
+          ></textarea>
+          <div class="valid-feedback">Looks good!</div>
+          <div class="invalid-feedback">Please fill out this field.</div>
+      </div>
+      <button type="submit" class="btn btn-success">Submit</button>
+      </form>
+      <% if (place.reviews.length > 0) { %>
+        <% place.reviews.forEach(review => { %>
+          <div class="card mb-3 mt-3">
+            <div class="card-body">
+              <h5 class="card-title">Rating: <%= review.rating %></h5>
+              <p class="card-text"><%= review.comment %></p>
+              <form action="/places/<%= place._id%>/reviews/<%=review._id%>?_method=DELETE" method="post" style="display: inline;">
+                <button class="btn btn-danger btn-sm">Delete</button>
+              </form>
+            </div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <p>No reviews yet.</p>
+      <% } %>
   </div>
 </div>
