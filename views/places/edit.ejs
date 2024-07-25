@@ -1,7 +1,12 @@
 <% layout("layouts/app")%>
 <div class="col-6 offset-3">
   <h3>Edit place</h3>
-  <form action="/places/<%=place._id%>?_method=PUT" method="post">
+  <form
+    action="/places/<%=place._id%>?_method=PUT"
+    method="post"
+    class="validation-form"
+    novalidate
+  >
     <div class="mb-3">
       <label for="title" class="form-label">Title:</label>
       <input
@@ -12,6 +17,8 @@
         class="form-control"
         value="<%=place.title%>"
       />
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
     </div>
     <div class="mb-3">
       <label for="location" class="form-label">Location:</label>
@@ -23,6 +30,8 @@
         class="form-control"
         value="<%=place.location%>"
       />
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
     </div>
     <div class="mb-3">
       <label for="price" class="form-label">Price:</label>
@@ -35,6 +44,8 @@
         class="form-control"
         value="<%=place.price%>"
       />
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
     </div>
     <div class="mb-3">
       <label for="image" class="form-label">Image:</label>
@@ -46,6 +57,8 @@
         class="form-control"
         value="<%=place.image%>"
       />
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
     </div>
     <div class="mb-3">
       <label for="description" class="form-label">Description:</label>
@@ -57,7 +70,34 @@
         class="form-control"
         value="<%=place.description%>"
       />
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
     </div>
     <button type="submit" class="btn btn-success" id="">Submit</button>
   </form>
 </div>
+
+<script>
+  (() => {
+    "use strict";
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll(".validation-form");
+
+    // Loop over them and prevent submission
+    Array.from(forms).forEach((form) => {
+      form.addEventListener(
+        "submit",
+        (event) => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+
+          form.classList.add("was-validated");
+        },
+        false
+      );
+    });
+  })();
+</script>

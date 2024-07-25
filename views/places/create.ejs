@@ -2,7 +2,7 @@
 <div class="col-6 offset-3">
   <h3>Create a new place</h3>
   <p>Please fill out the form below to add a new place.</p>
-  <form action="/places" method="post">
+  <form action="/places" method="post" class="validation-form" novalidate>
     <div class="mb-3">
       <label for="title" class="form-label">Title:</label>
       <input
@@ -12,6 +12,8 @@
         required
         class="form-control"
       />
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
     </div>
     <div class="mb-3">
       <label for="location" class="form-label">Location:</label>
@@ -22,6 +24,8 @@
         required
         class="form-control"
       />
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
     </div>
     <div class="mb-3">
       <label for="price" class="form-label">Price:</label>
@@ -33,6 +37,8 @@
         required
         class="form-control"
       />
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
     </div>
     <div class="mb-3">
       <label for="image" class="form-label">Image:</label>
@@ -43,6 +49,8 @@
         required
         class="form-control"
       />
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
     </div>
     <div class="mb-3">
       <label for="description" class="form-label">Description:</label>
@@ -53,7 +61,33 @@
         required
         class="form-control"
       />
+      <div class="valid-feedback">Looks good!</div>
+      <div class="invalid-feedback">Please fill out this field.</div>
     </div>
     <button type="submit" class="btn btn-success" id="">Submit</button>
   </form>
 </div>
+<script>
+  (() => {
+    "use strict";
+
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    const forms = document.querySelectorAll(".validation-form");
+
+    // Loop over them and prevent submission
+    Array.from(forms).forEach((form) => {
+      form.addEventListener(
+        "submit",
+        (event) => {
+          if (!form.checkValidity()) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+
+          form.classList.add("was-validated");
+        },
+        false
+      );
+    });
+  })();
+</script>
