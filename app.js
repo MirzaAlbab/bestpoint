@@ -7,6 +7,7 @@ const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync");
 const ErrorHandler = require("./utils/ErrorHandler");
 
+// connect mongodb
 mongoose
   .connect("mongodb://127.0.0.1/bestpoints")
   .then((res) => {
@@ -18,11 +19,28 @@ mongoose
 
 // models
 const Place = require("./models/place");
+
+// schemas
+const { placeSchema } = require("./schemas/place");
+
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
+// middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+
+const validatePlace = (req, res, next) => {
+  console.log(req.body);
+  const { error } = placeSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((e) => e.message).join(", ");
+    return next(new ErrorHandler(msg, 400));
+  } else {
+    next();
+  }
+};
 
 app.get("/", (req, res) => {
   res.render("home");
@@ -43,6 +61,7 @@ app.get("/places/new", (req, res) => {
 
 app.post(
   "/places",
+  validatePlace,
   wrapAsync(async (req, res) => {
     const place = new Place(req.body.place);
     console.log(req.body);
@@ -69,6 +88,7 @@ app.get(
 
 app.put(
   "/places/:id",
+  validatePlace,
   wrapAsync(async (req, res) => {
     const place = await Place.findByIdAndUpdate(req.params.id, {
       ...req.body.place,
