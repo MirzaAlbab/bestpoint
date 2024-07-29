@@ -36,6 +36,7 @@ router.post(
     const place = new Place(req.body.place);
     console.log(req.body);
     await place.save();
+    req.flash("successMsg", "Place saved successfully");
     res.redirect("/places");
   })
 );
@@ -63,6 +64,7 @@ router.put(
     const place = await Place.findByIdAndUpdate(req.params.id, {
       ...req.body.place,
     });
+    req.flash("successMsg", "Place updated successfully");
     res.redirect(`/places/${place._id}`);
   })
 );
@@ -71,6 +73,7 @@ router.delete(
   "/:id",
   wrapAsync(async (req, res) => {
     await Place.findByIdAndDelete(req.params.id);
+    req.flash("successMsg", "Place deleted successfully");
     res.redirect("/places");
   })
 );
