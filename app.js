@@ -23,10 +23,12 @@ app.set("views", path.join(__dirname, "views"));
 // middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
   res.render("home");
 });
+
 app.use("/places", require("./routes/places"));
 app.use("/places/:place_id/reviews", require("./routes/review"));
 
