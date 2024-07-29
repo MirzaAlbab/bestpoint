@@ -6,6 +6,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
 const flash = require("connect-flash");
+const ErrorHandler = require("./utils/ErrorHandler");
 // connect mongodb
 mongoose
   .connect("mongodb://127.0.0.1/bestpoints")
@@ -50,6 +51,10 @@ app.get("/", (req, res) => {
 
 app.use("/places", require("./routes/places"));
 app.use("/places/:place_id/reviews", require("./routes/review"));
+
+app.all("*", (req, res, next) => {
+  next(new ErrorHandler());
+});
 
 app.use((err, req, res, next) => {
   const { statusCode = 500 } = err;
