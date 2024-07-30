@@ -1,4 +1,4 @@
-<% if(successMsg.length > 0) { %>
+<% if(successMsg && successMsg.length) {%>
 <div class="alert alert-success alert-dismissible fade show" role="alert">
   <%= successMsg %>
   <button
@@ -8,7 +8,7 @@
     aria-label="Close"
   ></button>
 </div>
-<% } %> <% if(errorMsg.length > 0) { %>
+<% } %> <% if(errorMsg && errorMsg.length) {%>
 <div class="alert alert-danger alert-dismissible fade show" role="alert">
   <%= errorMsg %>
   <button

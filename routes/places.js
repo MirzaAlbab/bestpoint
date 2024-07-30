@@ -5,6 +5,7 @@ const ErrorHandler = require("../utils/ErrorHandler");
 const wrapAsync = require("../utils/wrapAsync");
 const isValidObjectId = require("../middleware/isValidObjectId");
 const isAuth = require("../middleware/isAuth");
+const { isAuthorPlace } = require("../middleware/isAuthor");
 
 const router = express.Router();
 
@@ -22,7 +23,6 @@ router.get(
   "/",
   wrapAsync(async (req, res) => {
     const places = await Place.find();
-    console.log(places);
     res.render("places/index", { places });
   })
 );
@@ -58,6 +58,7 @@ router.get(
 router.get(
   "/:id/edit",
   isAuth,
+  isAuthorPlace,
   isValidObjectId("/places"),
   wrapAsync(async (req, res) => {
     const place = await Place.findById(req.params.id);
@@ -68,26 +69,22 @@ router.get(
 router.put(
   "/:id",
   isAuth,
+  isAuthorPlace,
   isValidObjectId("/places"),
   validatePlace,
   wrapAsync(async (req, res) => {
-    const { id } = req.params;
-    let place = await Place.findById(id);
-    if (!place.author.equals(req.user._id)) {
-      req.flash("errorMsg", "Unauthorized to edit this place");
-      return res.redirect(`/places/${place._id}`);
-    }
     await Place.findByIdAndUpdate(req.params.id, {
       ...req.body.place,
     });
     req.flash("successMsg", "Place updated successfully");
-    res.redirect(`/places/${place._id}`);
+    res.redirect(`/places/${req.params._id}`);
   })
 );
 
 router.delete(
   "/:id",
   isAuth,
+  isAuthorPlace,
   isValidObjectId("/places"),
   wrapAsync(async (req, res) => {
     await Place.findByIdAndDelete(req.params.id);
