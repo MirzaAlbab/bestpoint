@@ -4,6 +4,7 @@ const { placeSchema } = require("../schemas/place");
 const ErrorHandler = require("../utils/ErrorHandler");
 const wrapAsync = require("../utils/wrapAsync");
 const isValidObjectId = require("../middleware/isValidObjectId");
+const isAuth = require("../middleware/isAuth");
 
 const router = express.Router();
 
@@ -26,12 +27,13 @@ router.get(
   })
 );
 
-router.get("/new", (req, res) => {
+router.get("/new", isAuth, (req, res) => {
   res.render("places/create");
 });
 
 router.post(
   "/",
+  isAuth,
   validatePlace,
   wrapAsync(async (req, res) => {
     const place = new Place(req.body.place);
@@ -53,6 +55,7 @@ router.get(
 
 router.get(
   "/:id/edit",
+  isAuth,
   isValidObjectId("/places"),
   wrapAsync(async (req, res) => {
     const place = await Place.findById(req.params.id);
@@ -62,6 +65,7 @@ router.get(
 
 router.put(
   "/:id",
+  isAuth,
   isValidObjectId("/places"),
   validatePlace,
   wrapAsync(async (req, res) => {
@@ -75,6 +79,7 @@ router.put(
 
 router.delete(
   "/:id",
+  isAuth,
   isValidObjectId("/places"),
   wrapAsync(async (req, res) => {
     await Place.findByIdAndDelete(req.params.id);
