@@ -7,6 +7,9 @@ const ejsMate = require("ejs-mate");
 const session = require("express-session");
 const flash = require("connect-flash");
 const ErrorHandler = require("./utils/ErrorHandler");
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user");
 // connect mongodb
 mongoose
   .connect("mongodb://127.0.0.1/bestpoints")
@@ -38,6 +41,12 @@ app.use(
   })
 );
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
   res.locals.successMsg = req.flash("successMsg");
   res.locals.errorMsg = req.flash("errorMsg");
@@ -49,6 +58,7 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
+app.use("/", require("./routes/auth"));
 app.use("/places", require("./routes/places"));
 app.use("/places/:place_id/reviews", require("./routes/review"));
 
