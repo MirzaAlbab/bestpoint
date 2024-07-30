@@ -51,7 +51,6 @@ router.get(
     const place = await Place.findById(req.params.id)
       .populate("reviews")
       .populate("author");
-    console.log(place);
     res.render("places/show", { place });
   })
 );
@@ -72,7 +71,13 @@ router.put(
   isValidObjectId("/places"),
   validatePlace,
   wrapAsync(async (req, res) => {
-    const place = await Place.findByIdAndUpdate(req.params.id, {
+    const { id } = req.params;
+    let place = await Place.findById(id);
+    if (!place.author.equals(req.user._id)) {
+      req.flash("errorMsg", "Unauthorized to edit this place");
+      return res.redirect(`/places/${place._id}`);
+    }
+    await Place.findByIdAndUpdate(req.params.id, {
       ...req.body.place,
     });
     req.flash("successMsg", "Place updated successfully");
