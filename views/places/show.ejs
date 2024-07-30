@@ -31,6 +31,7 @@
   </div>
   <div class="col-6">
     <h2>Review</h2>
+    <% if (currentUser) { %>
     <form action="/places/<%=place._id%>/reviews" class="validation-form" novalidate method="post">
       <div class="mb-3">
         <label for="rating">Rating:</label>
@@ -51,15 +52,18 @@
       </div>
       <button type="submit" class="btn btn-success">Submit</button>
       </form>
+      <% } %>
       <% if (place.reviews.length > 0) { %>
         <% place.reviews.forEach(review => { %>
           <div class="card mb-3 mt-3">
             <div class="card-body">
               <h5 class="card-title">Rating: <%= review.rating %></h5>
               <p class="card-text"><%= review.comment %></p>
+              <% if(currentUser && review.author.equals(currentUser._id)) { %>
               <form action="/places/<%= place._id%>/reviews/<%=review._id%>?_method=DELETE" method="post" style="display: inline;">
                 <button class="btn btn-danger btn-sm">Delete</button>
               </form>
+              <% } %>
             </div>
           </div>
         <% }); %>

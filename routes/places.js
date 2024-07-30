@@ -37,7 +37,6 @@ router.post(
   validatePlace,
   wrapAsync(async (req, res) => {
     const place = new Place(req.body.place);
-    console.log(req.body);
     await place.save();
     req.flash("successMsg", "Place saved successfully");
     res.redirect("/places");
@@ -49,7 +48,10 @@ router.get(
   isValidObjectId("/places"),
   wrapAsync(async (req, res) => {
     const place = await Place.findById(req.params.id)
-      .populate("reviews")
+      .populate({
+        path: "reviews",
+        populate: { path: "author" },
+      })
       .populate("author");
     res.render("places/show", { place });
   })

@@ -162,7 +162,7 @@ async function seedPlaces() {
   try {
     await Place.deleteMany();
     const newPlace = places.map((place) => {
-      return { ...place, author: "66a8aa290218c83e6ae910a9" };
+      return { ...place, author: "66a8e92964e1a7f7bf30bcdb" };
     });
     await Place.insertMany(newPlace);
     console.log("Data berhasil disimpan");
