@@ -48,6 +48,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
+  res.locals.currentUser = req.user; // add currentUser to all templates as a global variable. If user is authenticated, currentUser will be the user object. Otherwise, it will be undefined.
   res.locals.successMsg = req.flash("successMsg");
   res.locals.errorMsg = req.flash("errorMsg");
   res.locals.error = req.flash("error");

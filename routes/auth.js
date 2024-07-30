@@ -15,9 +15,12 @@ router.post(
     try {
       const { email, username, password } = req.body;
       const user = new User({ email, username });
-      await User.register(user, password);
-      req.flash("successMsg", "User registered");
-      res.redirect("/login");
+      const registerUser = await User.register(user, password);
+      req.login(registerUser, (err) => {
+        if (err) return next(err);
+        req.flash("successMsg", "User registered and logged successfully");
+        res.redirect("/places");
+      });
     } catch (error) {
       req.flash("errorMsg", error.message);
       res.redirect("/register");
@@ -43,5 +46,15 @@ router.post(
     res.redirect("/places");
   }
 );
+
+router.post("/logout", (req, res) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    req.flash("successMsg", "Logged out successfully");
+    res.redirect("/login");
+  });
+});
 
 module.exports = router;
