@@ -77,7 +77,7 @@ router.put(
       ...req.body.place,
     });
     req.flash("successMsg", "Place updated successfully");
-    res.redirect(`/places/${req.params._id}`);
+    res.redirect(`/places/${req.params.id}`);
   })
 );
 
