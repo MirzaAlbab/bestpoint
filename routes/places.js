@@ -5,13 +5,19 @@ const isAuth = require("../middleware/isAuth");
 const { isAuthorPlace } = require("../middleware/isAuthor");
 const PlaceController = require("../controllers/place");
 const { validatePlace } = require("../middleware/validator");
+const upload = require("../config/multer");
 
 const router = express.Router();
 
 router
   .route("/")
   .get(wrapAsync(PlaceController.index))
-  .post(isAuth, validatePlace, wrapAsync(PlaceController.store));
+  .post(
+    isAuth,
+    upload.array("image", 5),
+    validatePlace,
+    wrapAsync(PlaceController.store)
+  );
 
 router.get("/new", isAuth, PlaceController.create);
 

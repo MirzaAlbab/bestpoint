@@ -2,7 +2,13 @@
 <div class="col-6 offset-3">
   <h3>Create a new place</h3>
   <p>Please fill out the form below to add a new place.</p>
-  <form action="/places" method="post" class="validation-form" novalidate>
+  <form
+    action="/places"
+    method="post"
+    class="validation-form"
+    novalidate
+    enctype="multipart/form-data"
+  >
     <div class="mb-3">
       <label for="title" class="form-label">Title:</label>
       <input
@@ -42,10 +48,19 @@
     </div>
     <div class="mb-3">
       <label for="image" class="form-label">Image:</label>
-      <input
+      <!-- <input
         type="text"
         id="image"
         name="place[image]"
+        required
+        class="form-control"
+      /> -->
+      <input
+        type="file"
+        name="image"
+        id="image"
+        accept="image/*"
+        multiple
         required
         class="form-control"
       />

@@ -12,13 +12,15 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({
-  storage,
-  fileFilter: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    if (file.mimeType.startsWith("image/")) {
+  storage: storage,
+  fileFilter: function (req, file, cb) {
+    // fungsi untuk memeriksa format file yang diizinkan
+    if (file.mimetype.startsWith("image/")) {
       cb(null, true);
     } else {
-      cb(new ErrorHandler("Only images are allowed"));
+      cb(new ExpressError("Only images are allowed.", 405));
     }
   },
 });
+
+module.exports = upload;
