@@ -1,5 +1,6 @@
 const Place = require("../models/place");
 const fs = require("fs");
+const ExpressError = require("../utils/ErrorHandler");
 
 module.exports.index = async (req, res) => {
   const places = await Place.find();
@@ -45,7 +46,7 @@ module.exports.update = async (req, res) => {
 
   if (req.files && req.files.length > 0) {
     place.images.forEach((image) => {
-      fs.unlinkSync(image.url, (err) => new ExpressError(err, next));
+      fs.unlinkSync(image.url, (err) => new ExpressError(err));
     });
 
     const images = req.files.map((file) => ({
@@ -61,7 +62,39 @@ module.exports.update = async (req, res) => {
 };
 
 module.exports.destroy = async (req, res) => {
-  await Place.findByIdAndDelete(req.params.id);
+  const { id } = req.params;
+  const place = await Place.findById(id);
+  if (place.images.length > 0) {
+    place.images.forEach((image) => {
+      fs.unlinkSync(image.url, (err) => new ExpressError(err));
+    });
+  }
+  await place.deleteOne();
+
   req.flash("successMsg", "Place deleted successfully");
   res.redirect("/places");
+};
+
+module.exports.destroyImages = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { images } = req.body;
+
+    if (!images || images.length === 0) {
+      req.flash("errorMsg", "Please select at least one image");
+      return res.redirect(`/places/${id}/edit`);
+    }
+
+    images.forEach((image) => {
+      fs.unlinkSync(image);
+    });
+
+    await Place.findByIdAndUpdate(id, {
+      $pull: { images: { url: { $in: images } } },
+    });
+    req.flash("successMsg", "Selected images deleted successfully");
+    res.redirect(`/places/${id}/edit`);
+  } catch (error) {
+    req.flash("errorMsg", "failed to delete selected images");
+  }
 };
