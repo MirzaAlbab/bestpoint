@@ -11,6 +11,7 @@ module.exports.create = (req, res) => {
 
 module.exports.store = async (req, res) => {
   const place = new Place(req.body.place);
+  place.author = req.user._id;
   await place.save();
   req.flash("successMsg", "Place saved successfully");
   res.redirect("/places");
