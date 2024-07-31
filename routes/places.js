@@ -28,6 +28,7 @@ router
     isAuth,
     isAuthorPlace,
     isValidObjectId("/places"),
+    upload.array("image", 5),
     validatePlace,
     wrapAsync(PlaceController.update)
   )

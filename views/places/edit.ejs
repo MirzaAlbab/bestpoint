@@ -6,6 +6,7 @@
     method="post"
     class="validation-form"
     novalidate
+    enctype="multipart/form-data"
   >
     <div class="mb-3">
       <label for="title" class="form-label">Title:</label>
@@ -50,12 +51,12 @@
     <div class="mb-3">
       <label for="image" class="form-label">Image:</label>
       <input
-        type="text"
+        type="file"
+        name="image"
         id="image"
-        name="place[image]"
-        required
+        accept="image/*"
+        multiple
         class="form-control"
-        value="<%=place.image%>"
       />
       <div class="valid-feedback">Looks good!</div>
       <div class="invalid-feedback">Please fill out this field.</div>
