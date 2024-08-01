@@ -49,6 +49,7 @@
     </div>
   </div>
   <div class="col-6">
+    <div style="width: 640px; height: 480px" class="mb-5" id="mapContainer"></div>
     <h2>Review</h2>
     <% if (currentUser) { %>
     <form action="/places/<%=place._id%>/reviews" class="validation-form" novalidate method="post">
@@ -104,4 +105,27 @@
         <p>No reviews yet.</p>
       <% } %>
   </div>
+  <script>
+    const place = <%- JSON.stringify(place) %>;
+    console.log(place);
+    const placeLocation = {lng: place.geometry.coordinates[0], lat: place.geometry.coordinates[1]};
+  </script>
+  <script>
+    // Initialize the platform object
+    const platform = new H.service.Platform({
+      'apikey': '4-AeFpFEFXi9ZvlY1X0Wm-aMYU3-Sk5bA45_LUMfyJY'
+    });
+
+    // Obtain the default map types from the platform object
+    const maptypes = platform.createDefaultLayers();
+
+    // Instantiate (and display) the map
+    const map = new H.Map(
+      document.getElementById('mapContainer'),
+      maptypes.vector.normal.map,
+      {
+        zoom: 10,
+        center: placeLocation
+      });
+  </script>
 </div>
