@@ -5,7 +5,14 @@ const { geometry } = require("../utils/hereMaps");
 
 module.exports.index = async (req, res) => {
   const places = await Place.find();
-  res.render("places/index", { places });
+  const clusteringPlaces = places.map((place) => {
+    return {
+      latitude: place.geometry.coordinates[1],
+      longitude: place.geometry.coordinates[0],
+    };
+  });
+  const clusteredPlace = JSON.stringify(clusteringPlaces);
+  res.render("places/index", { places, clusteredPlace });
 };
 
 module.exports.create = (req, res) => {
